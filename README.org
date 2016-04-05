@@ -37,7 +37,7 @@ except some special ones.
 *** Trigger specific errors
 
 To trigger specific errors you send well crafted tokens including what error you'd like to receive.
-The format looks like this: ~"fff<error code>aaaaaaaaaaaaaaa..."~ where ~error code~ specifies the error.
+The format looks like this: ~fff<error code>aaaaaaaaaaaaaaa...~ where ~error code~ specifies the error.
 
 Example:
 If you want an "Invalid token size" error (error code 5), send a token looking something like this:
