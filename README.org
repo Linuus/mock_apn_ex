@@ -4,26 +4,26 @@
 
 MockApnEx is a mock server for the binary API of Apples Push Notification Service (APNS).
 
-** To be implemented
-*** TODO Config for port
-*** TODO Make sure start/stop/supervision works correctly
-*** TODO Add some tests
+*To be implemented*
+- [ ] Config for port
+- [ ] Make sure start/stop/supervision works correctly
+- [ ] Add some tests
 
-** Maybe later
-*** TODO Feedback system?
+*Maybe later*
+- [ ] Feedback system?
 
 ** Installation
 
 Not released on hex yet, so you need to pull from Github.
 
-1. Add mock_apn_ex to your list of dependencies in `mix.exs`:
+1. Add mock_apn_ex to your list of dependencies in ~mix.exs~:
 #+BEGIN_SRC elixir
 def deps do
   [{:mock_apn_ex, github: "linuus/mockapnex", only: :test}]
 end
 #+END_SRC
 
-2. Start MockApnEx in your `test/test_helper.exs`
+2. Start MockApnEx in your ~test/test_helper.exs~
 #+BEGIN_SRC elixir
 MockApnEx.start
 #+END_SRC
@@ -37,11 +37,11 @@ except some special ones.
 *** Trigger specific errors
 
 To trigger specific errors you send well crafted tokens including what error you'd like to receive.
-The format looks like this: `"fff<error code>aaaaaaaaaaaaaaa..."` where `error code` specifies the error.
+The format looks like this: ~"fff<error code>aaaaaaaaaaaaaaa..."~ where ~error code~ specifies the error.
 
 Example:
 If you want an "Invalid token size" error (error code 5), send a token looking something like this:
-`"fff5aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"`.
+~"fff5aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"~.
 
 Errors can be found in APNS documentation, but because programmers are lazy I list them here:
 
