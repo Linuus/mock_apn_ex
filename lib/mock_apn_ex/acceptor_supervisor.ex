@@ -10,7 +10,7 @@ defmodule MockApnEx.AcceptorSupervisor do
 
     :ssl.start()
 
-    {:ok, listen_socket} = :ssl.listen(5555, [certfile: "/Users/linus/Code/elixir/mock_apn_ex/priv/certs/cert.pem", keyfile: "/Users/linus/Code/elixir/mock_apn_ex/priv/certs/key.pem", password: 'asdf', mode: :binary, active: :false, packet: 0])
+    {:ok, listen_socket} = :ssl.listen(5555, [certfile: "priv/certs/cert.pem", keyfile: "priv/certs/key.pem", password: 'asdf', mode: :binary, active: :false, packet: 0])
     spawn_link(fn -> empty_listeners() end)
 
     children = [
