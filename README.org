@@ -5,12 +5,12 @@
 MockApnEx is a mock server for the binary API of Apples Push Notification Service (APNS).
 
 *To be implemented*
-- [ ] Config for port
-- [ ] Make sure start/stop/supervision works correctly
-- [ ] Add some tests
+-[ ] Config for port
+-[ ] Make sure start/stop/supervision works correctly
+-[ ] Add some tests
 
 *Maybe later*
-- [ ] Feedback system?
+-[ ] Feedback system?
 
 ** Installation
 
@@ -41,7 +41,7 @@ The format looks like this: ~"fff<error code>aaaaaaaaaaaaaaa..."~ where ~error c
 
 Example:
 If you want an "Invalid token size" error (error code 5), send a token looking something like this:
-~"fff5aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"~.
+~fff5aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~.
 
 Errors can be found in APNS documentation, but because programmers are lazy I list them here:
 
