@@ -1,6 +1,20 @@
 defmodule MockApnEx.Server do
   use GenServer
 
+  @statuses %{
+    0   => "No errors encountered",
+    1   => "Processing",
+    2   => "Missing device token",
+    3   => "Missing topic",
+    4   => "Missing payload",
+    5   => "Invalid token size",
+    6   => "Invalid topic size",
+    7   => "Invalid payload size",
+    8   => "Invalid token",
+    10  => "Shutdown",
+    255 => "None (unknown)"
+  }
+
   def start_link(listen_socket) do
     GenServer.start_link(__MODULE__, listen_socket, [])
   end
@@ -27,10 +41,12 @@ defmodule MockApnEx.Server do
       rest :: binary
       >> ->
         token = token |> Base.encode16(case: :lower)
-        case token do
-          <<error :: binary-1, _ :: binary>> ->
-            error = String.to_integer(error)
-            :ssl.send(socket, <<error :: 8, 8 :: 8, msg_id :: binary>>)
+        status_keys = Enum.map(@statuses, fn({key, _}) -> Integer.to_string(key) end)
+
+        case captures = Regex.named_captures(~r/fff(?<status>[#{status_keys}]+)/, token) do
+          %{"status" => status} ->
+            status = String.to_integer(status)
+            :ssl.send(socket, <<status :: 8, 8 :: 8, msg_id :: binary>>)
             :ssl.close(socket)
             {:noreply, %{state | buffer: rest}}
           _ ->

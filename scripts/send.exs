@@ -3,7 +3,7 @@ defmodule SendMessage do
   {:ok, socket} = :ssl.connect('localhost', 5555, [packet: 0, active: true, mode: :binary])
 
   payload = %{aps: %{alert: "Test"}} |> Poison.encode!
-  token_bin = "8000000000000000000000000000000000000000000000000000000000000AbC" |> Base.decode16!(case: :mixed)
+  token_bin = "fff3aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaAbC" |> Base.decode16!(case: :mixed)
   frame = <<
   1                  :: 8,
   32                 :: 16,
@@ -32,6 +32,7 @@ defmodule SendMessage do
   receive do
     {:ssl, _socket, <<8 :: 8, 8 :: 8, msg_id :: binary>>} ->
       IO.inspect(msg_id)
+    other -> IO.inspect(other)
   end
 
   receive do
