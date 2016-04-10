@@ -4,11 +4,6 @@
 
 MockApnEx is a mock server for the binary API of Apples Push Notification Service (APNS).
 
-*To be implemented*
-- Config for port
-- Make sure start/stop/supervision works correctly
-- Add some tests
-
 *Maybe later*
 - Feedback system?
 
@@ -23,10 +18,21 @@ def deps do
 end
 #+END_SRC
 
-2. Start MockApnEx in your ~test/test_helper.exs~
+2. Configure MockApnEx in your config file.
 #+BEGIN_SRC elixir
-MockApnEx.start
+config :mock_apn_ex,
+  port: 2195, # Default port
+  certfile: "priv/certs/cert.pem",
+  keyfile: "priv/certs/key.pem",
+  password: 'asdf'
 #+END_SRC
+
+3. Start MockApnEx in your ~test/test_helper.exs~
+#+BEGIN_SRC elixir
+MockApnEx.start()
+#+END_SRC
+
+4. Configure your ssl client to use ~localhost:port~ instead of the real Apple url.
 
 ** Usage
 
