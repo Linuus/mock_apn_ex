@@ -35,9 +35,11 @@ defmodule MockApnEx.Server do
   def handle_cast(:respond, %{socket: socket, buffer: buffer} = state) do
     case buffer do
       <<
-      1 :: 8, token_size :: 16, token :: binary-size(token_size),
-      2 :: 8, payload_size :: 16, _payload :: binary-size(payload_size),
-      3 :: 8, 4 :: 16, msg_id :: binary-4,
+      1::8, token_size::16, token::binary-size(token_size),
+      2::8, payload_size::16, _payload::binary-size(payload_size),
+      3::8, 4::16, msg_id::binary-4,
+      4::8, 4::16, _expiry::integer-32,
+      5::8, 1::16, _priority::8,
       rest :: binary
       >> ->
         token = token |> Base.encode16(case: :lower)
@@ -46,7 +48,8 @@ defmodule MockApnEx.Server do
         case captures = Regex.named_captures(~r/fff(?<status>[#{status_keys}]+)/, token) do
           %{"status" => status} ->
             status = String.to_integer(status)
-            :ssl.send(socket, <<status :: 8, 8 :: 8, msg_id :: binary>>)
+
+            :ssl.send(socket, <<8::8, status::8, msg_id::binary>>)
             :ssl.close(socket)
             {:noreply, %{state | buffer: rest}}
           _ ->
@@ -64,5 +67,10 @@ defmodule MockApnEx.Server do
       <<2 :: 8, frame_size :: 32, frame :: binary-size(frame_size)>> ->
         {:noreply, %{state | buffer: <<buffer :: binary, frame :: binary>>}}
     end
+  end
+
+  def handle_info({:ssl_closed, _socket}, state) do
+    GenServer.stop(self())
+    {:noreply, state}
   end
 end
