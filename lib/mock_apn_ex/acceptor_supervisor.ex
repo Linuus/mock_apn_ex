@@ -6,11 +6,11 @@ defmodule MockApnEx.AcceptorSupervisor do
   end
 
   def init(:ok) do
-    # {ok, Port} = application:get_env(port),
+    port = Application.get_env(:mock_apn_ex, :port) || 2195
 
     :ssl.start()
 
-    {:ok, listen_socket} = :ssl.listen(5555, [certfile: "priv/certs/cert.pem", keyfile: "priv/certs/key.pem", password: 'asdf', mode: :binary, active: :false, packet: 0])
+    {:ok, listen_socket} = :ssl.listen(port, ssl_opts())
     spawn_link(fn -> empty_listeners() end)
 
     children = [
@@ -26,5 +26,14 @@ defmodule MockApnEx.AcceptorSupervisor do
 
   defp empty_listeners do
     for _ <- (1..20), do: start_socket()
+  end
+
+  defp ssl_opts do
+    Application.get_all_env(:mock_apn_ex)
+    |> Keyword.take([:certfile, :keyfile, :password])
+    |> Keyword.put(:mode, :binary)
+    |> Keyword.put(:active, :false)
+    |> Keyword.put(:packet, 0)
+    |> Keyword.put(:reuseaddr, true)
   end
 end
