@@ -1,9 +1,12 @@
 defmodule SendMessage do
-  :ssl.start
-  {:ok, socket} = :ssl.connect('localhost', 5555, [packet: 0, active: true, mode: :binary])
+  :ssl.start()
+  {:ok, socket} = :ssl.connect('localhost', 2195, [packet: 0, active: true, mode: :binary])
 
   payload = %{aps: %{alert: "Test"}} |> Poison.encode!
-  token_bin = "fff3aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaAbC" |> Base.decode16!(case: :mixed)
+  token_bin =
+    "fff3aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaAbC"
+    |> Base.decode16!(case: :mixed)
+
   frame = <<
   1                  :: 8,
   32                 :: 16,
